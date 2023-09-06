@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\PostDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PostRequest;
+use App\Models\Post;
+use App\Models\Write;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -21,15 +24,23 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.post.create');
+        $post = new Post();
+        $write = Write::select('id','write')->get();
+        return view('admin.post.create', compact('post','write'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+       
+        $post = new Post();
+        $post->title = $request->title;
+        $post->description = $request->description;
+        $post->write_id = $request->write_id;
+        $post->save();
+        return redirect()->back();
     }
 
     /**

@@ -74,7 +74,6 @@
                                         <option value="{{ $item->id }}">{{ $item->countryname }}</option>
                                     @endforeach
                                 </select>
-
                             </div>
 
                             <div class="form-group mb-0">
@@ -249,31 +248,3 @@
         // });
     </script>
 @endpush
-
-
-
-{{-- // Assuming your buttons are in a container with the ID "buttonContainer"
-var buttonContainer = $('#buttonContainer');
-buttonContainer.empty(); // Clear existing buttons
-
-for (var i = 0; i < numberOfButtons; i++) {
-    var remove = $('<button class="btn_remove" name="remove" type="button" id="row' + i + '">X</button>');
-    buttonContainer.append(remove); // Add new buttons to the container
-} --}}
-{{-- var i = 1;
-
-function addRow() {
-i++;
-var clone = $('#dynamic_field tbody tr:last').clone();
-$('#dynamic_field tbody').append(clone);
-var remove = $('<button class="btn_remove" name="remove" type="button">X</button>');
-clone.find('.btn_remove_container').empty().append(remove);
-}
-
-$('#add').click(function() {
-addRow();
-});
-
-$(document).on('click', '.btn_remove', function() {
-$(this).closest('tr').remove();
-}); --}}

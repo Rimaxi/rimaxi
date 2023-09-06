@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\WriteDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\WriteRequest;
+use App\Models\Write;
 use Illuminate\Http\Request;
 
 class WriteController extends Controller
@@ -27,9 +29,14 @@ class WriteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(WriteRequest $request)
     {
-        //
+        $write = new Write();
+        $write->write = $request->write;
+        $write->email = $request->email;
+        $write->status = $request->status;
+        $write->save();
+        return redirect()->back();
     }
 
     /**
@@ -59,8 +66,24 @@ class WriteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $write = Write::find($id);
+
+        if ($write) {
+            $response['success'] = 0;
+            $response['msg'] = 'Invalid ID.';
+        } else {
+            if ($write->delete()) {
+                $response['success'] = 1;
+                $response['msg'] = 'Delete successfully';
+            } else {
+                $response['success'] = 0;
+                $response['msg'] = 'Error deleting write.';
+            }
+        }
+
+        return response()->json($response);
     }
+
 }

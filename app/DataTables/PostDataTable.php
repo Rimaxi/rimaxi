@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -22,15 +23,12 @@ class PostDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        ->editColumn('post', function ($query) {
-            return $query->post ?: '-';
+        ->editColumn('title', function ($query) {
+            return $query->title ?: '-';
         })
-        ->editColumn('email', function ($query) {
-            return $query->email ?: '-';
-        })
-        ->editColumn('status', function ($query) {
-            $statusButton = '<a href="# " class="status-toggle btn btn-sm ' . ($query->status == 1 ? 'btn-success' : 'btn-danger') . '" data-id="' . $query->id . '" data-status="' . $query->status . '">' . ($query->status == 1 ? 'Active' : 'Inactive') . '</a>';
-            return $statusButton;
+
+        ->editColumn('write_id', function ($query) {
+            return ($query?->write?->write ?: '-');
         })
 
         ->addColumn('action', function ($data) {
@@ -40,7 +38,7 @@ class PostDataTable extends DataTable
             $btn = $btn . '<button type="button" data-id="' . $data->id . '" class="delete btn btn-danger btn-sm">Delete</button>';
             return $btn;
         })
-        ->rawColumns(['post', 'email', 'status', 'action']);
+        ->rawColumns(['post','write_id', 'action']);
     }
 
     /**
@@ -48,7 +46,7 @@ class PostDataTable extends DataTable
      */
     public function query(Post $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->with('write')->newQuery();
     }
 
     /**
@@ -62,15 +60,7 @@ class PostDataTable extends DataTable
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+                    ->selectStyleSingle();
     }
 
     /**
@@ -80,9 +70,8 @@ class PostDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('post'),
-            Column::make('email'),
-            Column::make('status'),
+            Column::make('title'),
+            Column::make('write_id')->name('write.write'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

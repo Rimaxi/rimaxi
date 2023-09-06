@@ -8,6 +8,8 @@
 // use App\Http\Controllers\HobbyController;
 // use App\Http\Controllers\ItalianController;
 // use App\Http\Controllers\StateController;
+
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +38,9 @@ Auth::routes();
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth:user')->name('home');
+
+Route::get('/showpost', [HomeController::class,'showPost'])->name('show.post');
+
 
 Route::get('/userlogin',[UserController::class,'login'])->name('user.login')->middleware('guest:user');
 Route::post('/userlogin',[UserController::class,'userlogin'])->name('loginuser')->middleware('guest:user');

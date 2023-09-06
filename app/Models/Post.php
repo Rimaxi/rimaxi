@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
     protected $table = 'posts';
     protected $fillable = [
-        'post', 'write_id','email', 'status'
+        'title', 'write_id','description', 'status'
     ];
     public function write(): BelongsTo
     {

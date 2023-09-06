@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Post;
+use GuzzleHttp\Psr7\Request;
 
 class HomeController extends Controller
 {
@@ -24,6 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $post = Post::all();
+        return view('home',compact('post'));
     }
+
 }

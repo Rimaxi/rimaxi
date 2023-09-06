@@ -29,7 +29,7 @@
                                 </h4>
                             </div>
                             <div class="card-body">
-                                <form id="addcountry">
+                                <form id="addwrite">
                                     @csrf
                                     <div class="mb-0">
                                         <label for="exampleFormControlInput1" class="form-label">writers</label>
@@ -62,10 +62,10 @@
         </div>
     </h2>
 @endsection
-{{-- @push('script')
+@push('script')
     <script>
         $(document).ready(function() {
-            $(document).on('submit', '#addcountry', function(event) {
+            $(document).on('submit', '#addwrite', function(event) {
                 event.preventDefault();
                 var ajaxData = new FormData(this);
                 var value = "an error occured";
@@ -74,13 +74,13 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     type: 'POST',
-                    url: "{{ route('country.store') }}",
+                    url: "{{ route('write.store') }}",
                     data: ajaxData,
                     cache: false,
                     processData: false,
                     contentType: false,
                     success: function(result) {
-                        window.location.href = "{{ route('country.index') }}";
+                        window.location.href = "{{ route('write.index') }}";
                     },
                     error: function(response) {
                         if (response.responseJSON && response.responseJSON.errors) {
@@ -93,5 +93,7 @@
                 })
             });
         });
+
     </script>
-@endpush --}}
+@endpush
+

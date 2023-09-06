@@ -33,11 +33,11 @@ class WriteDataTable extends DataTable
                 return $statusButton;
             })
 
-            ->addColumn('action', function ($data) {
+            ->addColumn('action', function ($write) {
 
                 $btn = '<a href="#" class="view btn btn-info btn-sm">View</a>';
-                $btn = $btn . '<button type="button" data-id="' . $data->id . '"class="edit btn btn-primary btn-sm">Edit</button>';
-                $btn = $btn . '<button type="button" data-id="' . $data->id . '" class="delete btn btn-danger btn-sm">Delete</button>';
+                $btn = $btn . '<button type="button" data-id="' . $write->id . '"class="edit btn btn-primary btn-sm">Edit</button>';
+                $btn = $btn . '<a href="' . route('write.destroy', ['write' => $write->id]) . '"  type="button" data-id="' . $write->id . '" class="delete btn btn-danger btn-sm">Delete</a>';
                 return $btn;
             })
             ->rawColumns(['write', 'email', 'status', 'action']);
@@ -62,15 +62,7 @@ class WriteDataTable extends DataTable
             ->minifiedAjax()
             //->dom('Bfrtip')
             ->orderBy(1)
-            ->selectStyleSingle()
-            ->buttons([
-                Button::make('excel'),
-                Button::make('csv'),
-                Button::make('pdf'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            ]);
+            ->selectStyleSingle();
     }
 
     /**

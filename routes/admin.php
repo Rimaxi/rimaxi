@@ -65,3 +65,5 @@ Route::post('/update/{id?}', [UseraddController::class, 'userUpdate'])->name('up
 
 Route::resource('post', PostController::class);
 Route::resource('write',WriteController::class);
+
+Route::post('/writer-status', [WriteController::class],'toggleStatus')->name('writer-status');

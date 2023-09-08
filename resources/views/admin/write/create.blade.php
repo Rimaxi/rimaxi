@@ -3,6 +3,7 @@
 @push('style')
 @endpush
 @section('content')
+
     <body>
         <style>
             .error {
@@ -33,23 +34,28 @@
                                     @csrf
                                     <div class="mb-0">
                                         <label for="exampleFormControlInput1" class="form-label">writers</label>
-                                        <input type="text" class="form-control" id="write" name="write" placeholder="Enter writers">
+                                        <input type="text" class="form-control" id="write" name="write"
+                                            placeholder="Enter writers">
                                         @error('write')
                                             <div class="error text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="mb-0">
                                         <label for="exampleFormControlInput1" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="email" name="email" placeholder="Enter email">
+                                        <input type="text" class="form-control" id="email" name="email"
+                                            placeholder="Enter email">
                                         @error('email')
                                             <div class="error text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="status">Status:</label>
-                                        <input type="radio" name="status" id="active" value="1">active
-                                        <input type="radio" name="status" id="inactive" value="0">inactive<br><br>
+                                        <input type="radio" name="status" id="active" value="1" {{ $write->status == 1 ? 'checked' : '' }}> Active
+                                        <input type="radio" name="status" id="inactive" value="0" {{ $write->status == 0 ? 'checked' : '' }}> Inactive
+                                        <br><br>
                                     </div>
+
+                                    <div id="writer-info" data-write="{{ $write->id }}"></div>
                                     <div class="form-group mb-3">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
@@ -86,14 +92,40 @@
                         if (response.responseJSON && response.responseJSON.errors) {
                             var errors = response.responseJSON.errors;
                             $.each(errors, function(key, value) {
-                                $("#" + key).after('<span class="error-message">' + value + '</span>');
+                                $("#" + key).after('<span class="error-message">' +
+                                    value + '</span>');
                             });
                         }
                     }
                 })
             });
-        });
 
+            $('input[type="radio"]').on('change', function() {
+                var status = $(this).val();
+                var write = $('#writer-info').data('write');
+                toggleWriterStatus(write, status);
+            });
+
+            function toggleWriterStatus(write, status) {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('writer-status') }}",
+                    data: {
+                        write: write,
+                        status: status
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            alert('Writer status updated successfully.');
+                        } else {
+                            alert('Failed to update writer status.');
+                        }
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
     </script>
 @endpush
-

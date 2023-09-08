@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,15 +36,16 @@ Route::get('/', function () {
 
 Auth::routes();
 
-
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth:user')->name('home');
+});
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('auth:user')->name('home');
 
-Route::get('/showpost', [HomeController::class,'showPost'])->name('show.post');
 
 
-Route::get('/userlogin',[UserController::class,'login'])->name('user.login')->middleware('guest:user');
-Route::post('/userlogin',[UserController::class,'userlogin'])->name('loginuser')->middleware('guest:user');
+Route::get('/userlogin', [UserController::class, 'login'])->name('user.login')->middleware('guest:user');
+Route::post('/userlogin', [UserController::class, 'userlogin'])->name('loginuser')->middleware('guest:user');
 Route::get('/user', [UserController::class, 'front'])->name('userRegister');
 Route::post('/storeuser', [UserController::class, 'store'])->name('userStore');
 Route::get('/logoutuser', [UserController::class, 'logout'])->name('logoutUsers')->middleware('auth:user');

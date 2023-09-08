@@ -1,11 +1,12 @@
 @extends('layouts.app')
+
 @section('content')
     <div class="container">
         <div class="card-header">{{ __('Dashboard') }}</div>
         <div class="card-body">
             {{ __('You are logged in!') }}
 
-            <!--Main Navigation-->
+            <!-- Main Navigation -->
             <header>
                 <!-- Jumbotron -->
                 <div class="p-3 text-center bg-white border-bottom">
@@ -49,7 +50,7 @@
                     <div class="container py-5">
                         <h1>
                             Best Books & <br />
-                            Novel in our store
+                            Novels in our store
                         </h1>
                         <p>
                             Trendy Products, Factory Prices, Excellent Service
@@ -64,36 +65,36 @@
                 </div>
                 <!-- Jumbotron -->
             </header>
+
             <!-- Products -->
+            <div>
+                <form action="{{ route('home') }}" method="GET">
+                    <label for="write">Filter by Writer:</label>
+                    <select name="write_id" id="write">
+                        <option value="">All Writers</option>
+                        @foreach ($write as $writer)
+                            <option value="{{ $writer->id }}">{{ $writer->write }}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit">Apply Filter</button>
+                </form>
+            </div>
             <section>
                 <div class="container my-5">
                     <header class="mb-4">
                         <h3>New products</h3>
                     </header>
-                    <div class="row">
-                        @foreach ($post as $post)
-                        <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-                            <div class="card w-100 my-2 shadow-2-strong">
-                                <img src="https://cdn.pixabay.com/photo/2019/03/01/18/32/night-4028339_640.jpg"
-                                    class="card-img-top" style="aspect-ratio: 1 / 1" />
-                                <div class="card-body d-flex flex-column">
-                                    <h1>{{ $post->title }}</h1>
-                                    <p>{!! $post->description !!}</p>
-                                    <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                                        <a href="#!" class="btn btn-primary shadow-0 me-1">View Post</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
+                    <div class="ajax-class">
+                        @include('post-list');
                     </div>
 
                 </div>
             </section>
+
             <div class="">
                 <div class="container">
                     <div class="d-flex justify-content-between py-4 border-top">
-                        <!--- payment --->
+                        <!-- Payment icons -->
                         <div>
                             <i class="fab fa-lg fa-cc-visa text-dark"></i>
                             <i class="fab fa-lg fa-cc-amex text-dark"></i>
@@ -106,3 +107,26 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('#write').on('change', function() {
+                var writeid = $(this).val();
+                $.ajax({
+                    url: "{{ route('home') }}",
+                    method: 'GET',
+                    data: {
+                        write_id: writeid
+                    },
+                    success: function(response) {
+                        $('.ajax-class').html(response.html);
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
+@endpush

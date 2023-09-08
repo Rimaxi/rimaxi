@@ -36,7 +36,7 @@ class WriteDataTable extends DataTable
             ->addColumn('action', function ($write) {
 
                 $btn = '<a href="#" class="view btn btn-info btn-sm">View</a>';
-                $btn = $btn . '<button type="button" data-id="' . $write->id . '"class="edit btn btn-primary btn-sm">Edit</button>';
+                $btn = $btn . '<a href="' . route('write.edit', ['write' => $write->id]) . '"  type="button" data-id="' . $write->id . '"class="edit btn btn-primary btn-sm">Edit</a>';
                 $btn = $btn . '<a href="' . route('write.destroy', ['write' => $write->id]) . '"  type="button" data-id="' . $write->id . '" class="delete btn btn-danger btn-sm">Delete</a>';
                 return $btn;
             })

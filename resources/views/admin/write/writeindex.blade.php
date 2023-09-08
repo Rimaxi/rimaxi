@@ -13,7 +13,6 @@
                     </div>
                     <h1>DataTables</h1>
                     {!! $dataTable->table() !!}
-
                 </div>
             </div>
         </div>

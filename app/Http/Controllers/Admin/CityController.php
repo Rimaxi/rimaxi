@@ -89,7 +89,6 @@ class CityController extends Controller
 
     public function getcity(Request $request)
     {
-
         $city = City::where('state_id', $request->city_id)->get(['id', 'city']);
         return response()->json(['city' => $city]);
     }

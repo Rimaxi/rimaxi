@@ -15,6 +15,7 @@ class WriteController extends Controller
      */
     public function index(WriteDataTable $table)
     {
+
         return $table->render('admin.write.writeindex');
     }
 
@@ -23,7 +24,8 @@ class WriteController extends Controller
      */
     public function create()
     {
-        return view('admin.write.create');
+        $write = new Write();
+        return view('admin.write.create', compact('write'));
     }
 
     /**
@@ -34,7 +36,6 @@ class WriteController extends Controller
         $write = new Write();
         $write->write = $request->write;
         $write->email = $request->email;
-        $write->status = $request->status;
         $write->save();
         return redirect()->back();
     }
@@ -52,7 +53,8 @@ class WriteController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $write = Write::find($id);
+        return view('admin.write.edit', compact('write'));
     }
 
     /**
@@ -60,7 +62,12 @@ class WriteController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $write = Write::find($id);
+        $write->write = $request->write;
+        $write->email = $request->email;
+        $write->status = $request->status;
+        $write->update();
+        return response()->json();
     }
 
     /**
@@ -85,5 +92,30 @@ class WriteController extends Controller
 
         return response()->json($response);
     }
+    public function toggleStatus(Request $request)
+    {
 
+        $write = Write::findOrFail($request->input('write'));
+        $status = $request->input('status');
+        dd($status);
+        $write->update(['status' => $status]);
+
+        return response()->json(['status' => 'success']);
+    }
+
+    // public function activateWriter($id)
+    // {
+    //     $write = Write::findOrFail($id);
+    //     $write->update(['is_active' => true]);
+
+    //     return redirect()->route('writers.index')->with('success', 'Writer activated successfully');
+    // }
+
+    // public function deactivateWriter($id)
+    // {
+    //     $write = Write::findOrFail($id);
+    //     $write->update(['is_active' => false]);
+
+    //     return redirect()->route('writers.index')->with('success', 'Writer deactivated successfully');
+    // }
 }

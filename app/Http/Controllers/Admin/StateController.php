@@ -88,7 +88,6 @@ class StateController extends Controller
             $newStatus = $state->status == 1 ? 0 : 1;
             $state->update(['status' => $newStatus]);
 
-            // Assuming you want to redirect back to the index view
             return redirect()->route('state.index')->with('success', 'Status updated successfully.');
         }
 
